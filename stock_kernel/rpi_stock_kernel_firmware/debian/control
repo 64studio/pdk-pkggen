@@ -1,0 +1,12 @@
+Source: rpi-stock-kernel-firmware
+Priority: optional
+Section: kernel
+Maintainer: Christopher Obbard <chris@64studio.com>
+Build-Depends: debhelper (>= 10)
+Standards-Version: 3.9.8
+
+Package: rpi-stock-kernel-firmware
+Architecture: armhf
+Depends: ${misc:Depends}
+Description: RPi Firmwre
+ Firmware for your RPi!

@@ -1,0 +1,7 @@
+pdk-pkggen
+==========
+
+set of scripts to create custom software packages for your custom distro.
+
+
+ - generates kernel & firmware package for rpi, already compiled by vendor

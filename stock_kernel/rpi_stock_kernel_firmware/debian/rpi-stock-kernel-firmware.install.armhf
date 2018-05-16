@@ -1,0 +1,30 @@
+# firmware binaries
+boot/*.elf /boot/
+boot/*.dat /boot/
+boot/*.bin /boot/
+boot/*.img /boot/
+
+# dtb & dt overlays
+boot/overlays /boot/overlays
+boot/*.dtb /boot/
+
+# kernel modules
+modules /lib/
+
+# firmware licences
+boot/LICENCE.broadcom /boot/LICENCE.broadcom
+boot/COPYING.linux /boot/COPYING.linux
+
+# VideoCoreIV libraries
+hardfp/opt/vc/bin/* /opt/vc/bin/
+hardfp/opt/vc/include/* /opt/vc/include/
+hardfp/opt/vc/lib/lib*.a /opt/vc/lib/
+hardfp/opt/vc/lib/lib*.so /opt/vc/lib/
+hardfp/opt/vc/lib/plugins /opt/vc/lib/plugins
+hardfp/opt/vc/sbin/* /opt/vc/sbin/
+hardfp/opt/vc/src/hello_pi /opt/vc/src/
+
+
+
+
+

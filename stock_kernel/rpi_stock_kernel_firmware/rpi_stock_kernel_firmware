@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+#
+# this script will download pre-compiled rpi kernel sources and package them for pdk to use.
+#
+# todo: split into multiple packages
+#
+
+# software used:
+# git devscripts dpkg-dev
+
+CWD=`pwd`
+DEST="$CWD/temp" # temp folder
+OUT="$CWD/out" # binary folder
+
+REPO_URL="https://github.com/raspberrypi/firmware.git"
+REPO_BRANCH="master"
+
+AUTHOR_NAME="Christopher Obbard"
+AUTHOR_EMAIL="chris@64studio.com"
+
+PACKAGE_NAME="rpi-stock-kernel-firmware"
+
+
+
+info() {
+  echo "[I] rpi_stock: $*"
+}
+
+error() {
+  echo "[I] rpi_stock: $*"
+}
+
+
+# remove the temporary area
+if [ -d "$DEST" ]; then
+  info "removing temp folder"
+  rm -rf "$DEST"
+fi
+
+
+# download pre-compiled kernel
+info "downloading kernel"
+git clone $REPO_URL --branch $REPO_BRANCH --depth 1 $DEST
+
+
+# make debian folder
+if [ -d "$DEST/debian" ]; then
+  rm "$DEST/debian" -rf
+fi
+mkdir "$DEST/debian"
+
+
+# generate the files in the debian dir.
+
+
+# generate changelog entry
+KERNEL_VER=`cat $DEST/extra/uname_string | cut -f 3 -d ' ' | tr -d +`
+DATE=`date -u +%Y%m%d`
+TIME=`date -u +%H%M%S`
+DEB_VER="1.$DATE.$TIME-1"
+export DEBEMAIL="$AUTHOR_NAME <$AUTHOR_EMAIL>"
+cd $DEST # todo: hack to make dch behave.
+dch --create --package $PACKAGE_NAME --newversion $DEB_VER -D "stable" -u "low" -p "Firmware update to ${KERNEL_VER}."
+cd $CWD # todo: hack to make dch behave.
+
+
+# copy in copyright file
+cp debian/* $DEST/debian/
+
+
+# build package
+cd $DEST
+dpkg-buildpackage -aarmhf -uc -us -b
+cd $CWD
+
+# move debs into into out folder
+if [ ! -d "$OUT" ]; then
+  mkdir "$OUT"
+fi
+
+mv $CWD/*.changes "$OUT/"
+mv $CWD/*.buildinfo "$OUT/"
+mv $CWD/*.deb "$OUT/"
+mv "$DEST/" "$OUT/src"
